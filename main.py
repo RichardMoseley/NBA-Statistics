@@ -1,4 +1,9 @@
 import pandas as pd
+from sqlalchemy import create_engine
+
+# Setting up sqllite database
+engine = create_engine("sqlite:///NBA-20-21")
+conn = engine.connect()
 
 # Establishing Team Names Data
 teamNames = pd.read_excel("Team Naming Conventions.xlsx")
@@ -30,3 +35,11 @@ salaries_df.drop(columns=["Player"], inplace=True)
 
 salaries_df = salaries_df[['Rank', 'First Name', 'Last Name',
                            'Signed Age', 'Yrs', 'Value', 'AAV', 'Sign Bonus']]
+
+# Importing Data to SQLite DataBase
+stats_df.to_sql('stats', conn)
+salaries_df.to_sql('salaries', conn)
+teamNames_df.to_sql('teams', conn)
+
+# Closing the connection to the DataBase
+conn.close()
